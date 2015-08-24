@@ -13,6 +13,13 @@
         <version>1.1.0</version>
     </parent>
 
+    <url>https://github.com/asbachb/dependency-decompiler-maven-plugin-api</url>
+    <scm>
+        <connection>scm:git:git@github.com:asbachb/dependency-decompiler-maven-plugin-api.git</connection>
+        <tag>HEAD</tag>
+        <url>https://github.com/asbachb/dependency-decompiler-maven-plugin-api</url>
+    </scm>
+
     <repositories>
         <repository>
             <id>github-asbachb-releases</id>
