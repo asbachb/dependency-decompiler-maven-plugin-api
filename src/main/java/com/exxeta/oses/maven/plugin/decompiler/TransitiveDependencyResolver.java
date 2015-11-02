@@ -16,8 +16,11 @@
 package com.exxeta.oses.maven.plugin.decompiler;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+
 import javax.inject.Inject;
+
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.project.MavenProject;
@@ -39,17 +42,28 @@ public class TransitiveDependencyResolver {
 
         DependencyNode dependencyGraph = defaultDependencyGraphBuilder.buildDependencyGraph(
                 mavenProject,
-                artifactFilter
+                null
         );
-        collectAllTransivieDependencies(transitiveDependencies, dependencyGraph);
+        collectAllTransitiveDependencies(transitiveDependencies, dependencyGraph);
+        filterCollectedDependencies(transitiveDependencies, artifactFilter);
 
         return transitiveDependencies;
     }
 
-    private void collectAllTransivieDependencies(Set<Artifact> transitiveDependencies, DependencyNode node) {
+    private void collectAllTransitiveDependencies(Set<Artifact> transitiveDependencies, DependencyNode node) {
         for (DependencyNode child : node.getChildren()) {
             transitiveDependencies.add(child.getArtifact());
-            collectAllTransivieDependencies(transitiveDependencies, child);
+            collectAllTransitiveDependencies(transitiveDependencies, child);
+        }
+    }
+    
+    private void filterCollectedDependencies(Set<Artifact> transitiveDependencies, ArtifactFilter artifactFilter) {
+        Iterator<Artifact> iterator = transitiveDependencies.iterator();
+        while (iterator.hasNext()) {
+            Artifact transitiveDependency = iterator.next();
+            if (!artifactFilter.include(transitiveDependency)) {
+                iterator.remove();
+            }
         }
     }
 }
