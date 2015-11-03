@@ -24,6 +24,11 @@ import java.nio.file.Path;
 public class DecompilationException extends Exception {
 
     private final Path faultyFile;
+
+    public DecompilationException(Throwable cause) {
+        super(cause);
+        this.faultyFile = null;
+    }
     
     public DecompilationException(Throwable cause, Path faultyFile) {
         super(cause);
